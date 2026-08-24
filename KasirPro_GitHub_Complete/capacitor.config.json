@@ -1,8 +1,0 @@
-{
-    "appId": "com.kasir.fashion",
-    "appName": "Kasir Fashion",
-    "webDir": ".",
-    "server": {
-        "androidScheme": "https"
-    }
-}
