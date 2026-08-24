@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111827">
+    <title>KasirPro - Toko Baju</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- LOGIN -->
+    <div id="loginPage" class="login-page">
+        <div class="login-card">
+            <div class="logo">KP</div>
+            <h1>KasirPro</h1>
+            <p>Kasir pribadi toko baju</p>
+
+            <form id="loginForm">
+                <label for="username">Username</label>
+                <input id="username" type="text" placeholder="admin" required>
+
+                <label for="password">Password</label>
+                <input id="password" type="password" placeholder="admin123" required>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    Masuk
+                </button>
+
+                <small>Demo: admin / admin123</small>
+            </form>
+        </div>
+    </div>
+
+    <!-- APPLICATION -->
+    <div id="app" class="app hidden">
+
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo logo-small">KP</div>
+                <div>
+                    <strong>KasirPro</strong>
+                    <span>Fashion Store</span>
+                </div>
+            </div>
+
+            <nav>
+                <button class="nav-button active" data-page="dashboard">
+                    <span>⌂</span> Dashboard
+                </button>
+                <button class="nav-button" data-page="kasir">
+                    <span>▣</span> Kasir
+                </button>
+                <button class="nav-button" data-page="produk">
+                    <span>▤</span> Produk & Stok
+                </button>
+                <button class="nav-button" data-page="transaksi">
+                    <span>◷</span> Transaksi
+                </button>
+                <button class="nav-button" data-page="laporan">
+                    <span>▥</span> Laporan Laba
+                </button>
+            </nav>
+
+            <button id="logoutButton" class="nav-button logout">
+                <span>↪</span> Keluar
+            </button>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <small>TOKO BAJU</small>
+                    <h2 id="pageTitle">Dashboard</h2>
+                </div>
+                <div class="admin-badge">● Admin</div>
+            </header>
+
+            <!-- DASHBOARD -->
+            <section id="dashboardPage" class="page">
+                <div class="hero">
+                    <div>
+                        <span class="status">TOKO BERJALAN</span>
+                        <h1>Selamat datang di KasirPro.</h1>
+                        <p>Kelola penjualan, produk, stok, dan laporan dalam satu aplikasi.</p>
+                    </div>
+                    <button class="btn btn-light" data-open-page="kasir">
+                        + Transaksi Baru
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span>Penjualan Hari Ini</span>
+                        <strong id="todaySales">Rp0</strong>
+                        <small id="todayTransactions">0 transaksi</small>
+                    </div>
+                    <div class="stat-card">
+                        <span>Total Produk</span>
+                        <strong id="totalProducts">0</strong>
+                        <small>produk tersimpan</small>
+                    </div>
+                    <div class="stat-card">
+                        <span>Stok Menipis</span>
+                        <strong id="lowStock">0</strong>
+                        <small>stok ≤ 5</small>
+                    </div>
+                    <div class="stat-card">
+                        <span>Total Transaksi</span>
+                        <strong id="totalTransactions">0</strong>
+                        <small>semua transaksi</small>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h3>Grafik Penjualan</h3>
+                            <p>7 hari terakhir</p>
+                        </div>
+                    </div>
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </section>
+
+            <!-- KASIR -->
+            <section id="kasirPage" class="page hidden">
+                <div class="section-header">
+                    <div>
+                        <h3>Kasir</h3>
+                        <p>Pilih produk untuk memasukkannya ke keranjang.</p>
+                    </div>
+                </div>
+
+                <div class="cashier-layout">
+                    <div class="panel">
+                        <div class="toolbar">
+                            <input id="searchProduct" type="search" placeholder="Cari nama atau SKU...">
+                            <select id="categoryFilter">
+                                <option value="">Semua kategori</option>
+                            </select>
+                        </div>
+                        <div id="productGrid" class="product-grid"></div>
+                    </div>
+
+                    <div class="panel cart-panel">
+                        <div class="panel-header">
+                            <h3>Keranjang</h3>
+                            <button id="clearCart" class="text-button">Kosongkan</button>
+                        </div>
+
+                        <div id="cartItems" class="cart-items"></div>
+
+                        <div class="checkout">
+                            <div class="total-row">
+                                <span>Subtotal</span>
+                                <strong id="subtotal">Rp0</strong>
+                            </div>
+
+                            <label for="discount">Diskon (Rp)</label>
+                            <input id="discount" type="number" min="0" value="0">
+
+                            <label for="payment">Bayar Cash (Rp)</label>
+                            <input id="payment" type="number" min="0" value="0">
+
+                            <div class="total-row grand-total">
+                                <span>Total</span>
+                                <strong id="grandTotal">Rp0</strong>
+                            </div>
+
+                            <div class="total-row">
+                                <span>Kembalian</span>
+                                <strong id="change">Rp0</strong>
+                            </div>
+
+                            <button id="checkoutButton" class="btn btn-primary btn-full">
+                                Selesaikan & Cetak Struk
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PRODUK -->
+            <section id="produkPage" class="page hidden">
+                <div class="section-header">
+                    <div>
+                        <h3>Produk & Stok</h3>
+                        <p>Edit harga, foto, modal, dan stok produk.</p>
+                    </div>
+                    <button id="addProductButton" class="btn btn-primary">
+                        + Tambah Produk
+                    </button>
+                </div>
+
+                <div class="panel">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Produk</th>
+                                    <th>SKU</th>
+                                    <th>Kategori</th>
+                                    <th>Harga Jual</th>
+                                    <th>Modal</th>
+                                    <th>Stok</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TRANSAKSI -->
+            <section id="transaksiPage" class="page hidden">
+                <div class="section-header">
+                    <div>
+                        <h3>Rekap Transaksi</h3>
+                        <p>Semua transaksi penjualan tersimpan di perangkat.</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>ID</th>
+                                    <th>Metode</th>
+                                    <th>Item</th>
+                                    <th>Total</th>
+                                    <th>Bayar</th>
+                                    <th>Kembalian</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LAPORAN LABA -->
+            <section id="laporanPage" class="page hidden">
+                <div class="section-header">
+                    <div>
+                        <h3>Laporan Laba</h3>
+                        <p>Perhitungan berdasarkan harga modal setiap produk.</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span>Omzet</span>
+                        <strong id="reportRevenue">Rp0</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>Total Modal</span>
+                        <strong id="reportCost">Rp0</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>Laba Kotor</span>
+                        <strong id="reportProfit">Rp0</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>Margin</span>
+                        <strong id="reportMargin">0%</strong>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h3>Laba per Produk</h3>
+                            <p>Ringkasan produk yang sudah terjual.</p>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Produk</th>
+                                    <th>Terjual</th>
+                                    <th>Omzet</th>
+                                    <th>Modal</th>
+                                    <th>Laba</th>
+                                </tr>
+                            </thead>
+                            <tbody id="profitTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- PRODUCT MODAL -->
+    <div id="productModal" class="modal hidden">
+        <div class="modal-card">
+            <div class="panel-header">
+                <h3 id="modalTitle">Tambah Produk</h3>
+                <button id="closeModal" class="icon-button">×</button>
+            </div>
+
+            <form id="productForm">
+                <input id="editProductId" type="hidden">
+
+                <label for="productName">Nama Produk</label>
+                <input id="productName" type="text" required>
+
+                <label for="productSku">SKU</label>
+                <input id="productSku" type="text" required>
+
+                <label for="productCategory">Kategori</label>
+                <input id="productCategory" type="text" required>
+
+                <label for="productPrice">Harga Jual</label>
+                <input id="productPrice" type="number" min="0" required>
+
+                <label for="productCost">Harga Modal</label>
+                <input id="productCost" type="number" min="0" required>
+
+                <label for="productStock">Stok</label>
+                <input id="productStock" type="number" min="0" required>
+
+                <label for="productPhoto">Foto Produk</label>
+                <input id="productPhoto" type="file" accept="image/*">
+
+                <div id="photoPreview" class="photo-preview hidden"></div>
+
+                <div class="modal-actions">
+                    <button id="cancelModal" type="button" class="btn btn-secondary">
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Simpan Produk
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
